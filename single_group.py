@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env /Users/qli/opt/miniconda3/bin/python3
 #-*- coding:utf-8 -*-
 '''
   作于2016年9月26日
@@ -28,15 +28,15 @@ class GetPost(object):
 
     def __init__(self, session):
         self.session = session
-        
-        
+
+
     def get_post_info(self, user_id, group_url, html_file):
-        
+
         r = self.session.get(group_url)
-        
+
         # 豆瓣有反爬虫机制，会在抓取一段时间后要求输入验证码
         # 此时程序已经被重定向到一个403页面
-        
+
         # 这个功能目前没有实现！！！！！___**___这个if语句块里面的代码是没用的=_=
         if r.status_code == 403:
             # 获取验证码
@@ -57,7 +57,7 @@ class GetPost(object):
 
         post_list = bsObj.find('table', {"class": "olt"}).findAll('tr', {'class': ''})
         post_list.pop(0)
-        
+
         for each_post in post_list:
             user_tag = each_post.find('td', {'nowrap': 'nowrap'}).find('a')
             text = user_tag.get_text()
@@ -83,7 +83,7 @@ class GetPost(object):
 
 
 if __name__ == '__main__':
-    
+
     username = input('输入用户名：')
     password = input('输入密码：')
 
@@ -95,19 +95,19 @@ if __name__ == '__main__':
 
     # 先获取用户ID，方便后面使用
     douban_id = input('输入用户ID：')
-    
+
     group_url = input('输入组链接：')
-    r = session.get(group_url)
-    html = r.text
-    bsObj = bs(html, 'html.parser')
+    #r = session.get(group_url)
+    #html = r.text
+    #bsObj = bs(html, 'html.parser')
 
-    next_tag = bsObj.find('span', {"class": "next"})
-    total_page = next_tag.previous_element.previous_element
-    print("该小组共有%s页" % total_page)
+    #next_tag = bsObj.find('span', {"class": "next"})
+    #total_page = next_tag.previous_element.previous_element
+    #print("该小组共有%s页" % total_page)
 
-    find_num = input('你想查找多少页？默认查找全部') or total_page
+    find_num = input('你想查找多少页？默认查找10页') or total_page
     find_num = int(find_num)
-    
+
     html_file = open('post.html', 'a')
 
     pre_url = re.sub('\d+', '', group_url)

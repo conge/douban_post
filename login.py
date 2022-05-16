@@ -19,7 +19,7 @@ def login_douban(username, password):
         'remember': 'on',
         'login': u'登录'
         }
-
+    session.post(url=login_url, data=preload)
     r = session.get('https://www.douban.com/accounts/login')
     # 豆瓣有反爬虫机制，会在抓取一段时间后要求输入验证码
     # 此时程序已经被重定向到一个403页面
@@ -27,7 +27,7 @@ def login_douban(username, password):
     test_html = r.text
     test_bo = BeautifulSoup(test_html, 'lxml')
     title = test_bo.title.string
-    if title == '禁止访问':
+    if title == '豆瓣 - 登录跳转页':
         # 获取验证码
         preload = dict()
         captcha_bs = BeautifulSoup(r.text, 'lxml')
